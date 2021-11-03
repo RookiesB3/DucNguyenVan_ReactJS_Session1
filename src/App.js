@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import HeroList from "./components/pages/HeroListPage/HeroList.js";
+import Detail from "./components/pages/DetailsPage/Detail.js";
+import MessagesPage from "./components/pages/MessagesPage/MessagesPage.js";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 function App() {
+  const [heroes, setHeroes] = useState([]);
+  const [selectedItem, setSelectedItem] = useState({});
+  const [message, setMessage] = useState([]);
+
+  useEffect(() => {
+    axios({
+      methods: "GET",
+      url: "https://60dff0ba6b689e001788c858.mockapi.io/heroes",
+    }).then((response) => {
+      console.log(response.data);
+      setHeroes(response.data);
+    });
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Tour of Heroes</h1>
+      <h2 className="hero-heading">My Heroes</h2>
+      <HeroList
+        heroes={heroes}
+        setHeroes={setHeroes}
+        setSelectedItem={setSelectedItem}
+        selectedItem={selectedItem}
+        message={message}
+        setMessage={setMessage}
+      />
+      <Detail
+        heroes={heroes}
+        setHeroes={setHeroes}
+        selectedItem={selectedItem}
+      />
+      <MessagesPage message={message} setMessage={setMessage} />
     </div>
   );
 }
